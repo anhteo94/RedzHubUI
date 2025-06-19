@@ -1,55 +1,58 @@
---[[
-Phạm Nghĩa IOS - GUI RedzHub Chính Thức
-Phiên bản: Full chức năng
-Tác giả: ChatGPT x Phạm Nghĩa
-]]
-
+-- Phạm Nghĩa GUI - Phong cách Zis Roblox
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
-local TeleportService = game:GetService("TeleportService")
 local LocalPlayer = Players.LocalPlayer
 
--- Hàm: Auto Farm
-local function StartAutoFarm()
-    spawn(function()
-        while _G.AutoFarm do
-            pcall(function()
-                local myLevel = LocalPlayer.Data.Level.Value
-                -- Lấy thông tin nhiệm vụ phù hợp
-                -- Di chuyển đến NPC nhiệm vụ
-                -- Nhận nhiệm vụ
-                -- Tìm quái phù hợp
-                -- Đánh quái
-                print("Đang farm level: "..myLevel)
-            end)
-            wait(1)
-        end
-    end)
+-- Tạo ScreenGui
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "PhạmNghĩa_ZisGUI"
+
+-- Main Frame
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.new(0, 600, 0, 350)
+main.Position = UDim2.new(0.5, -300, 0.5, -175)
+main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+main.BorderSizePixel = 0
+
+-- Sidebar (Tab trái)
+local sidebar = Instance.new("Frame", main)
+sidebar.Size = UDim2.new(0, 150, 1, 0)
+sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+
+local tabs = {"Tab Welcome", "Auto Boss", "Auto Legendary Sword", "Auto Race V4"}
+for i, name in pairs(tabs) do
+    local btn = Instance.new("TextButton", sidebar)
+    btn.Size = UDim2.new(1, 0, 0, 40)
+    btn.Position = UDim2.new(0, 0, 0, (i - 1) * 42)
+    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    btn.Text = name
+    btn.TextColor3 = Color3.new(1, 1, 1)
 end
 
--- Giao diện đơn giản (mô phỏng)
-local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
-ScreenGui.Name = "PhamNghiaIOS"
+-- Nội dung phải
+local content = Instance.new("Frame", main)
+content.Size = UDim2.new(1, -160, 1, -10)
+content.Position = UDim2.new(0, 160, 0, 10)
+content.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 
-local Frame = Instance.new("Frame", ScreenGui)
-Frame.Size = UDim2.new(0, 400, 0, 300)
-Frame.Position = UDim2.new(0.5, -200, 0.5, -150)
-Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+local buttons = {
+    "Auto Hop Mirage",
+    "Remove Fog",
+    "ESP Mirage",
+    "Teleport Mirage Island",
+    "Teleport Advanced Fruit Dealer",
+    "Auto Lock Moon",
+    "Tween Gear"
+}
 
-local AutoFarmBtn = Instance.new("TextButton", Frame)
-AutoFarmBtn.Size = UDim2.new(0, 200, 0, 50)
-AutoFarmBtn.Position = UDim2.new(0.5, -100, 0, 50)
-AutoFarmBtn.Text = "Auto Farm: OFF"
-AutoFarmBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-AutoFarmBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+for i, name in pairs(buttons) do
+    local btn = Instance.new("TextButton", content)
+    btn.Size = UDim2.new(0, 250, 0, 35)
+    btn.Position = UDim2.new(0, 10, 0, (i - 1) * 40)
+    btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    btn.Text = name
+    btn.TextColor3 = Color3.new(1, 1, 1)
 
-_G.AutoFarm = false
-AutoFarmBtn.MouseButton1Click:Connect(function()
-    _G.AutoFarm = not _G.AutoFarm
-    AutoFarmBtn.Text = _G.AutoFarm and "Auto Farm: ON" or "Auto Farm: OFF"
-    if _G.AutoFarm then StartAutoFarm() end
+    btn.MouseButton1Click:Connect(function()
+    game.Lighting.FogEnd = 100000
+    game.Lighting.FogStart = 100000
 end)
-
--- Các tab và tính năng khác sẽ được bổ sung dần (ESP, Teleport, AntiBan...)
--- Vui lòng theo dõi repo để nhận cập nhật mới nhất

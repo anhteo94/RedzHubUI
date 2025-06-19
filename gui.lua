@@ -1,108 +1,99 @@
--- Phạm Nghĩa GUI – Zis Roblox Style (Hoạt động thật)
+-- Phạm Nghĩa Hub – GUI Blox Fruits giống Banana Cat Hub
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-local gui = Instance.new("ScreenGui", game.CoreGui)
-gui.Name = "PhạmNghĩa_ZisGUI"
+-- Clean old GUI
+pcall(function() game.CoreGui["PhamNghiaHub"]:Destroy() end)
+
+-- Main ScreenGui
+local gui = Instance.new("ScreenGui")
+gui.Name = "PhamNghiaHub"
+gui.ResetOnSpawn = false
+gui.Parent = game.CoreGui
 
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 600, 0, 350)
-main.Position = UDim2.new(0.5, -300, 0.5, -175)
-main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+main.Size = UDim2.new(0, 540, 0, 360)
+main.Position = UDim2.new(0.5, -270, 0.5, -180)
+main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
 
+-- Left sidebar
 local sidebar = Instance.new("Frame", main)
 sidebar.Size = UDim2.new(0, 150, 1, 0)
-sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+sidebar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 
-local tabs = {"Tab Welcome", "Auto Boss", "Auto Legendary Sword", "Auto Race V4"}
-for i, name in pairs(tabs) do
-    local btn = Instance.new("TextButton", sidebar)
-    btn.Size = UDim2.new(1, 0, 0, 40)
-    btn.Position = UDim2.new(0, 0, 0, (i - 1) * 42)
-    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btn.Text = name
-    btn.TextColor3 = Color3.new(1, 1, 1)
-end
+local tabNames = {
+    "Farming", "Stack Farm", "Farming Other",
+    "Fruit & Raid", "Sea Event", "Upgrade Race",
+    "Get/Upgrade Items", "Volcano Event",
+    "ESP", "Local Player", "Status & Server", "Settings"
+}
+local buttons = {}
 
 local content = Instance.new("Frame", main)
-content.Size = UDim2.new(1, -160, 1, -10)
-content.Position = UDim2.new(0, 160, 0, 10)
+content.Size = UDim2.new(1, -150, 1, 0)
+content.Position = UDim2.new(0,150,0,0)
 content.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 
-local buttons = {
-    "Auto Hop Mirage",
-    "Remove Fog",
-    "ESP Mirage",
-    "Teleport Mirage Island",
-    "Teleport Advanced Fruit Dealer",
-    "Auto Lock Moon",
-    "Tween Gear"
-}
-
-for i, name in pairs(buttons) do
-    local btn = Instance.new("TextButton", content)
-    btn.Size = UDim2.new(0, 250, 0, 35)
-    btn.Position = UDim2.new(0, 10, 0, (i - 1) * 40)
-    btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+-- Create tabs
+local pages = {}
+for i, name in ipairs(tabNames) do
+    local btn = Instance.new("TextButton", sidebar)
+    btn.Size = UDim2.new(1, 0, 0, 32)
+    btn.Position = UDim2.new(0,0,0,(i-1)*34 + 10)
+    btn.BackgroundColor3 = Color3.fromRGB(45,45,45)
     btn.Text = name
-    btn.TextColor3 = Color3.new(1, 1, 1)
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.Name = name.."Btn"
+    buttons[name] = btn
 
-    if name == "Auto Hop Mirage" then
-        btn.MouseButton1Click:Connect(function()
-            while task.wait(3) do
-                game:GetService("TeleportService"):Teleport(game.PlaceId)
-            end
-        end)
-    elseif name == "Remove Fog" then
-        btn.MouseButton1Click:Connect(function()
-            game.Lighting.FogEnd = 100000
-            game.Lighting.FogStart = 100000
-        end)
-    elseif name == "ESP Mirage" then
-        btn.MouseButton1Click:Connect(function()
-            for _, v in pairs(workspace:GetDescendants()) do
-                if v:IsA("MeshPart") and v.Name == "Mirage Island" then
-                    local esp = Instance.new("BillboardGui", v)
-                    esp.Size = UDim2.new(0, 100, 0, 40)
-                    esp.AlwaysOnTop = true
-                    esp.Adornee = v
+    local page = Instance.new("Frame", content)
+    page.Size = UDim2.new(1,0,1,0)
+    page.Position = UDim2.new(0,0,0,0)
+    page.BackgroundTransparency = 1
+    page.Visible = false
+    pages[name] = page
 
-                    local label = Instance.new("TextLabel", esp)
-                    label.Size = UDim2.new(1, 0, 1, 0)
-                    label.BackgroundTransparency = 1
-                    label.Text = "🌙 Mirage Island"
-                    label.TextColor3 = Color3.fromRGB(0, 255, 255)
-                    label.TextScaled = true
-                end
-            end
-        end)
-    elseif name == "Teleport Mirage Island" then
-        btn.MouseButton1Click:Connect(function()
-            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(5000, 150, -4500)
-        end)
-    elseif name == "Teleport Advanced Fruit Dealer" then
-        btn.MouseButton1Click:Connect(function()
-            for _, v in pairs(workspace:GetDescendants()) do
-                if v.Name == "Advanced Fruit Dealer" then
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-                end
-            end
-        end)
-    elseif name == "Auto Lock Moon" then
-        btn.MouseButton1Click:Connect(function()
-            game.Lighting.ClockTime = 0
-        end)
-    elseif name == "Tween Gear" then
-        btn.MouseButton1Click:Connect(function()
-            local TweenService = game:GetService("TweenService")
-            local part = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-            if part then
-                local goal = {}
-                goal.CFrame = part.CFrame * CFrame.new(0, 0, -100)
-                local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear)
-                TweenService:Create(part, tweenInfo, goal):Play()
-            end
+    btn.MouseButton1Click:Connect(function()
+        for _,p in pairs(pages) do p.Visible = false end
+        for _,b in pairs(buttons) do b.BackgroundColor3 = Color3.fromRGB(45,45,45) end
+        page.Visible = true
+        btn.BackgroundColor3 = Color3.fromRGB(70,70,70)
+    end)
+end
+-- Default tab
+pages["Farming"].Visible = true
+buttons["Farming"].BackgroundColor3 = Color3.fromRGB(70,70,70)
+
+-- Add sample toggle to tab Farming: Auto Farm
+do
+    local page = pages["Farming"]
+    local tgl = Instance.new("TextButton", page)
+    tgl.Text = "Auto Farm: OFF"
+    tgl.Size = UDim2.new(0,200,0,40)
+    tgl.Position = UDim2.new(0.1,0,0.1,0)
+    tgl.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    local farming = false
+    local conn
+    local function Start()
+        farming = true; tgl.Text="Auto Farm: ON"
+        conn = game:GetService("RunService").Stepped:Connect(function()
+            -- Example auto-click/walk simulate
+            game:GetService("ReplicatedStorage").Remotes.Farming:FireServer()
         end)
     end
+    local function Stop()
+        farming = false; tgl.Text="Auto Farm: OFF"
+        if conn then conn:Disconnect() end
+    end
+    tgl.MouseButton1Click:Connect(function()
+        if farming then Stop() else Start() end
+    end)
 end
+
+-- (Bạn có thể thêm nhiều toggle tương tự cho từng tab)
+
+-- Done
+print("[PhamNghia Hub] GUI Loaded!")
